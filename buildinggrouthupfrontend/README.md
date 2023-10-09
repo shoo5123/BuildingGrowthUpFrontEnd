@@ -1,3 +1,27 @@
+## ことはじめ by atsushi
+・node.jsのインストール
+以下を参照
+https://nodejs.org/ja
+※最新版をインストールする
+
+・thirdwebのインストール
+```
+npx thirdweb install
+```
+※`thirdweb-dev/react`と`thirdweb-dev/sdk`のどちらをインストールするか聞かれるので、両方チェック（多分「a」コマンド）をつけてEnter
+
+・yarnのインストール
+```
+npm install -g yarn
+```
+※管理者権限が必要なので、ない場合は頭に`sudo `をつけること
+
+・yarnインストールの実行
+```
+yarn install
+```
+※これで`yarn dev`が通るはず
+
 ## Getting Started
 
 Create a project using this example:
