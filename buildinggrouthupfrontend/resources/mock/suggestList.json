@@ -1,0 +1,283 @@
+{
+    "new": [
+        {
+            "title": "aaa",
+            "endDate": "2024/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容new1〜〜〜〜"
+        },
+        {
+            "title": "bbb",
+            "endDate": "2024/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容new2〜〜〜〜"
+        },
+        {
+            "title": "ccc",
+            "endDate": "2024/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容new3〜〜〜〜"
+        },
+        {
+            "title": "ddd",
+            "endDate": "2024/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容new4〜〜〜〜"
+        },
+        {
+            "title": "eee",
+            "endDate": "2024/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容new5〜〜〜〜"
+        }
+    ],
+    "doing": [
+        {
+            "title": "fff",
+            "supportMember": [
+                {
+                    "memberId": 1,
+                    "memberName": "A1店"
+                },
+                {
+                    "memberId": 2,
+                    "memberName": "B1店"
+                },
+                {
+                    "memberId": 3,
+                    "memberName": "C1店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容doing1〜〜〜〜"
+        },
+        {
+            "title": "ggg",
+            "supportMember": [
+                {
+                    "memberId": 4,
+                    "memberName": "A2店"
+                },
+                {
+                    "memberId": 5,
+                    "memberName": "B2店"
+                },
+                {
+                    "memberId": 6,
+                    "memberName": "C2店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容doing2〜〜〜〜"
+        },
+        {
+            "title": "hhh",
+            "supportMember": [
+                {
+                    "memberId": 7,
+                    "memberName": "A3店"
+                },
+                {
+                    "memberId": 8,
+                    "memberName": "B3店"
+                },
+                {
+                    "memberId": 9,
+                    "memberName": "C3店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容doing3〜〜〜〜"
+        },
+        {
+            "title": "iii",
+            "supportMember": [
+                {
+                    "memberId": 10,
+                    "memberName": "A4店"
+                },
+                {
+                    "memberId": 11,
+                    "memberName": "B4店"
+                },
+                {
+                    "memberId": 12,
+                    "memberName": "C4店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容doing4〜〜〜〜"
+        },
+        {
+            "title": "jjj",
+            "supportMember": [
+                {
+                    "memberId": 13,
+                    "memberName": "A5店"
+                },
+                {
+                    "memberId": 14,
+                    "memberName": "B5店"
+                },
+                {
+                    "memberId": 15,
+                    "memberName": "C5店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容doing5〜〜〜〜"
+        }
+    ],
+    "done": [
+        {
+            "title": "kkk",
+            "supportMember": [
+                {
+                    "memberId": 16,
+                    "memberName": "D1店"
+                },
+                {
+                    "memberId": 17,
+                    "memberName": "E1店"
+                },
+                {
+                    "memberId": 18,
+                    "memberName": "F1店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容done1〜〜〜〜"
+        },
+        {
+            "title": "lll",
+            "supportMember": [
+                {
+                    "memberId": 19,
+                    "memberName": "D2店"
+                },
+                {
+                    "memberId": 20,
+                    "memberName": "E2店"
+                },
+                {
+                    "memberId": 21,
+                    "memberName": "F2店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容done2〜〜〜〜"
+        },
+        {
+            "title": "mmm",
+            "supportMember": [
+                {
+                    "memberId": 22,
+                    "memberName": "D3店"
+                },
+                {
+                    "memberId": 23,
+                    "memberName": "E3店"
+                },
+                {
+                    "memberId": 24,
+                    "memberName": "F3店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容done3〜〜〜〜"
+        },
+        {
+            "title": "nnn",
+            "supportMember": [
+                {
+                    "memberId": 25,
+                    "memberName": "D4店"
+                },
+                {
+                    "memberId": 26,
+                    "memberName": "E4店"
+                },
+                {
+                    "memberId": 27,
+                    "memberName": "F4店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容done4〜〜〜〜"
+        },
+        {
+            "title": "ooo",
+            "supportMember": [
+                {
+                    "memberId": 28,
+                    "memberName": "D5店"
+                },
+                {
+                    "memberId": 29,
+                    "memberName": "E5店"
+                },
+                {
+                    "memberId": 30,
+                    "memberName": "F5店"
+                }
+            ],
+            "endDate": "2023/12/01",
+            "reward": {
+                "rewardItem": "ticket",
+                "rewardValue": 2
+            },
+            "detail": "詳細内容done5〜〜〜〜"
+        }
+    ]
+}
