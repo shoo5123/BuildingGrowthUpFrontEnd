@@ -2,9 +2,12 @@ import { PageTemplate } from "../components/PageTemplate";
 import { NewsList, NewsProps } from "../components/NewsList";
 import { SuggestList, SuggestProps } from "../components/SuggestList";
 import { PrizeList, PrizeProps } from "../components/PrizeList";
+import SuggestDetailModal from "../components/SuggestDetailModal";
+import PrizeDetailModal from "../components/PrizeDetailModal";
 import { NextPage } from "next";
 import styled from "styled-components";
 import moment from "moment";
+import { useState } from "react";
 
 const Components = styled.div`
   display: flex;
@@ -136,6 +139,7 @@ const dummyNewsList: Array<NewsProps> = [
 
 const dummySuggestList: Array<SuggestProps> = [
   {
+    suggestId: 1,
     title: "aaa",
     status: "new",
     startDate: dummyDate,
@@ -143,6 +147,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 2,
     title: "bbb",
     status: "voting",
     startDate: dummyDate,
@@ -150,6 +155,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 3,
     title: "ccc",
     status: "doing",
     startDate: dummyDate,
@@ -157,6 +163,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 4,
     title: "ddd",
     status: "reject",
     startDate: dummyDate,
@@ -164,6 +171,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 5,
     title: "eee",
     status: "done",
     startDate: dummyDate,
@@ -171,6 +179,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 6,
     title: "aaa",
     status: "new",
     startDate: dummyDate,
@@ -178,6 +187,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 7,
     title: "bbb",
     status: "voting",
     startDate: dummyDate,
@@ -185,6 +195,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 8,
     title: "ccc",
     status: "doing",
     startDate: dummyDate,
@@ -192,6 +203,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 9,
     title: "ddd",
     status: "reject",
     startDate: dummyDate,
@@ -199,6 +211,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 10,
     title: "eee",
     status: "done",
     startDate: dummyDate,
@@ -206,6 +219,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 11,
     title: "aaa",
     status: "new",
     startDate: dummyDate,
@@ -213,6 +227,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 12,
     title: "bbb",
     status: "voting",
     startDate: dummyDate,
@@ -220,6 +235,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 13,
     title: "ccc",
     status: "doing",
     startDate: dummyDate,
@@ -227,6 +243,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 14,
     title: "ddd",
     status: "reject",
     startDate: dummyDate,
@@ -234,6 +251,7 @@ const dummySuggestList: Array<SuggestProps> = [
     description: "description",
   },
   {
+    suggestId: 15,
     title: "eee",
     status: "done",
     startDate: dummyDate,
@@ -244,42 +262,101 @@ const dummySuggestList: Array<SuggestProps> = [
 
 const dummyPrizeList: Array<PrizeProps> = [
   {
-    imageUrl: "",
-    description: "",
+    prizeId: 1,
+    title: "aaaaa",
+    imageUrl: "../images/image1.png",
+    description: "ああああああああああああああああああ",
     prizeFruit: 10,
+  },
+  {
+    prizeId: 2,
+    title: "bbbbb",
+    imageUrl: "../images/image2.png",
+    description: "いいいいいいいいいいいいいいいいいい",
+    prizeFruit: 20,
+  },
+  {
+    prizeId: 3,
+    title: "ccccc",
+    imageUrl: "../images/image3.png",
+    description: "うううううううううううううううううう",
+    prizeFruit: 30,
+  },
+  {
+    prizeId: 4,
+    title: "ddddd",
+    imageUrl: "../images/image4.png",
+    description: "ええええええええええええええええええ",
+    prizeFruit: 40,
+  },
+  {
+    prizeId: 5,
+    title: "aaaaa",
+    imageUrl: "../images/image1.png",
+    description: "ああああああああああああああああああ",
+    prizeFruit: 10,
+  },
+  {
+    prizeId: 6,
+    title: "bbbbb",
+    imageUrl: "../images/image2.png",
+    description: "いいいいいいいいいいいいいいいいいい",
+    prizeFruit: 20,
+  },
+  {
+    prizeId: 7,
+    title: "ccccc",
+    imageUrl: "../images/image3.png",
+    description: "うううううううううううううううううう",
+    prizeFruit: 30,
+  },
+  {
+    prizeId: 8,
+    title: "ddddd",
+    imageUrl: "../images/image4.png",
+    description: "ええええええええええええええええええ",
+    prizeFruit: 40,
   },
 ];
 
 // TOP画面
 const TopPage: NextPage = () => {
+  const [selectedSuggestId, setSelectedSuggestId] = useState<number | undefined>(undefined);
+  const [selectedPrizeId, setSelectedPrizeId] = useState<number | undefined>(undefined);
+  const selectedSuggest = dummySuggestList.find((suggest) => suggest.suggestId == selectedSuggestId);
+  const selectedPrize = dummyPrizeList.find((suggest) => suggest.prizeId == selectedPrizeId);
   return (
-    <PageTemplate>
-      <Components>
-        <NewsArea>
-          <NewsAreaTitle>
-            Pick Up News!
-          </NewsAreaTitle>
-          <NewsList newsList={dummyNewsList} />
-        </NewsArea>
-        <SuggestsAndPrizeArea>
-          <SuggestsArea>
-            <SuggestHeader>
-              <SuggestsAreaTitle>
-                Suggests
-              </SuggestsAreaTitle>
-              <SuggestButton onClick={() => window.confirm("TODO: モーダルを表示")}>提案を提出</SuggestButton>
-            </SuggestHeader>
-            <SuggestList suggestList={dummySuggestList} />
-          </SuggestsArea>
-          <PrizeArea>
-            <PrizeAreaTitle>
-              PrizeArea
-            </PrizeAreaTitle>
-            <PrizeList prizeList={dummyPrizeList} />
-          </PrizeArea>
-        </SuggestsAndPrizeArea>
-      </Components>
-    </PageTemplate>
+    <>
+      <PageTemplate>
+        <Components>
+          <NewsArea>
+            <NewsAreaTitle>
+              Pick Up News!
+            </NewsAreaTitle>
+            <NewsList newsList={dummyNewsList} />
+          </NewsArea>
+          <SuggestsAndPrizeArea>
+            <SuggestsArea>
+              <SuggestHeader>
+                <SuggestsAreaTitle>
+                  Suggests
+                </SuggestsAreaTitle>
+                <SuggestButton onClick={() => window.confirm("TODO: 提案作成画面に遷移")}>提案を提出</SuggestButton>
+              </SuggestHeader>
+              <SuggestList suggestList={dummySuggestList} changeOpenSuggestModal={setSelectedSuggestId} />
+            </SuggestsArea>
+            <PrizeArea>
+              <PrizeAreaTitle>
+                PrizeArea
+              </PrizeAreaTitle>
+              <PrizeList prizeList={dummyPrizeList} changeOpenPrizeModal={setSelectedPrizeId} />
+            </PrizeArea>
+          </SuggestsAndPrizeArea>
+        </Components>
+      </PageTemplate>
+      <SuggestDetailModal selectedSuggest={selectedSuggest} setSelectedSuggestId={setSelectedSuggestId} />
+      <PrizeDetailModal selectedPrize={selectedPrize} setSelectedPrizeId={setSelectedPrizeId} />
+    </>
   );
 };
 
