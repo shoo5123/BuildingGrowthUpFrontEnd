@@ -64,9 +64,11 @@ const SuggestLimitArea = styled.div`
 
 interface Props {
   suggestList: Array<SuggestProps>;
+  changeOpenSuggestModal: (selectedSuggestId: number | undefined) => void;
 }
 
 export interface SuggestProps {
+  suggestId: number;
   title: string;
   status: SuggestStatus;
   startDate: string;
@@ -133,8 +135,8 @@ const getSuggestStatusIcon = (status: SuggestStatus) => {
     }
 };
 
-export const SuggestList: React.FC<Props> = ({ suggestList }) => {
-  const [selectedStatus, setSelectedStatus] = useState<SuggestStatus | undefined>(undefined)
+export const SuggestList: React.FC<Props> = ({ suggestList, changeOpenSuggestModal }) => {
+  const [selectedStatus, setSelectedStatus] = useState<SuggestStatus | undefined>(undefined);
   const onClickFilterStatusButton = (status: SuggestStatus) => {
     if (status == selectedStatus) {
       setSelectedStatus(undefined);
@@ -155,7 +157,7 @@ export const SuggestList: React.FC<Props> = ({ suggestList }) => {
       <SuggestListArea>
         {selectedSuggestList.map((suggest) => {
           return (
-            <SuggestLine>
+            <SuggestLine onClick={() => {changeOpenSuggestModal(suggest.suggestId)}}>
               <SuggestTitle>
                 {suggest.title}
               </SuggestTitle>
