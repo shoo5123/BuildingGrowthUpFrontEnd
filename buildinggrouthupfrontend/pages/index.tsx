@@ -5,6 +5,7 @@ import { PrizeList, PrizeProps } from "../components/PrizeList";
 import SuggestDetailModal from "../components/SuggestDetailModal";
 import PrizeDetailModal from "../components/PrizeDetailModal";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import moment from "moment";
 import { useState } from "react";
@@ -321,6 +322,7 @@ const dummyPrizeList: Array<PrizeProps> = [
 
 // TOP画面
 const TopPage: NextPage = () => {
+  const router = useRouter();
   const [selectedSuggestId, setSelectedSuggestId] = useState<number | undefined>(undefined);
   const [selectedPrizeId, setSelectedPrizeId] = useState<number | undefined>(undefined);
   const selectedSuggest = dummySuggestList.find((suggest) => suggest.suggestId == selectedSuggestId);
@@ -341,7 +343,7 @@ const TopPage: NextPage = () => {
                 <SuggestsAreaTitle>
                   Suggests
                 </SuggestsAreaTitle>
-                <SuggestButton onClick={() => window.confirm("TODO: 提案作成画面に遷移")}>提案を提出</SuggestButton>
+                <SuggestButton onClick={() => router.push('/admin')}>提案を提出</SuggestButton>
               </SuggestHeader>
               <SuggestList suggestList={dummySuggestList} changeOpenSuggestModal={setSelectedSuggestId} />
             </SuggestsArea>
