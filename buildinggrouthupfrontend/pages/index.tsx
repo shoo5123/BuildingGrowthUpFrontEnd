@@ -1,14 +1,15 @@
 import { PageTemplate } from "../components/PageTemplate";
 import { NewsList, NewsProps } from "../components/NewsList";
-import { SuggestList, SuggestProps } from "../components/SuggestList";
+import { ProposalList, Proposal } from "../components/ProposalList";
 import { PrizeList, PrizeProps } from "../components/PrizeList";
-import SuggestDetailModal from "../components/SuggestDetailModal";
+import ProposalDetailModal from "../components/ProposalDetailModal";
 import PrizeDetailModal from "../components/PrizeDetailModal";
+import { useContract, useContractRead } from "@thirdweb-dev/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import moment from "moment";
 import { useState } from "react";
+import contractData from "../contract/custom_abi.json";
 
 const Components = styled.div`
   display: flex;
@@ -30,12 +31,7 @@ const NewsAreaTitle = styled.div`
   margin-bottom: 20px;
 `;
 
-const NewsListArea = styled.div`
-  border: solid 1px #000000;
-  width: 720px;
-`;
-
-const SuggestsAndPrizeArea = styled.div`
+const ProposalAndPrizeArea = styled.div`
   height: 520px;
   width: 1232px;
   margin-top: 24px;
@@ -44,14 +40,14 @@ const SuggestsAndPrizeArea = styled.div`
   justify-content: space-around;
 `;
 
-const SuggestsArea = styled.div`
+const ProposalArea = styled.div`
   width: 700px;
   margin-right: 12px;
   display: flex;
   flex-direction: column;
 `;
 
-const SuggestHeader = styled.div`
+const ProposalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,12 +56,12 @@ const SuggestHeader = styled.div`
   margin-bottom: 10px;
 `;
 
-const SuggestsAreaTitle = styled.div`
+const ProposalAreaTitle = styled.div`
   font-size: 28px;
   font-weight: bold;
 `;
 
-const SuggestButton = styled.div`
+const ProposalButton = styled.div`
   height: 32px;
   padding: 4px 8px;
   font-size: 16px;
@@ -93,173 +89,59 @@ const PrizeAreaTitle = styled.div`
   font-weight: bold;
 `;
 
-const dummyDate = moment().format('YYYY-MM-DD HH:mm');
+// const dummyDate = moment().format('YYYY-MM-DD HH:mm');
+const dummyDate = "2023-11-20 01:00";
 
 const dummyNewsList: Array<NewsProps> = [
   {
+    newsId: 1,
     newsType: "new",
     description: "クリスマスイベントが開催されるかも・・",
     listingDate: dummyDate,
   },
   {
+    newsId: 2,
     newsType: "done",
     description: "ハロウィンイベントが大盛況でした！",
     listingDate: dummyDate,
   },
   {
+    newsId: 3,
     newsType: "new",
     description: "エレベーターの混雑が緩和されるかも！^^",
     listingDate: dummyDate,
   },
   {
+    newsId: 4,
     newsType: "done",
     description: "A社とB社の共同展覧会が開催されました！",
     listingDate: dummyDate,
   },
   {
+    newsId: 5,
     newsType: "new",
     description: "お正月のおせちをみんなで作りませんか？",
     listingDate: dummyDate,
   },
   {
+    newsId: 6,
     newsType: "done",
     description: "上期の大感謝セールの口コミが大好評でした！",
     listingDate: dummyDate,
   },
   {
+    newsId: 7,
     newsType: "new",
     description: "日曜日のカフェ難民を皆さんで救いましょう！",
     listingDate: dummyDate,
   },
   {
+    newsId: 8,
     newsType: "done",
     description: "ショーケースイベントにD社とE社で参加しました！",
     listingDate: dummyDate,
   },
 ]
-
-const dummySuggestList: Array<SuggestProps> = [
-  {
-    suggestId: 1,
-    title: "aaa",
-    status: "new",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 2,
-    title: "bbb",
-    status: "voting",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 3,
-    title: "ccc",
-    status: "doing",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 4,
-    title: "ddd",
-    status: "reject",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 5,
-    title: "eee",
-    status: "done",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 6,
-    title: "aaa",
-    status: "new",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 7,
-    title: "bbb",
-    status: "voting",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 8,
-    title: "ccc",
-    status: "doing",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 9,
-    title: "ddd",
-    status: "reject",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 10,
-    title: "eee",
-    status: "done",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 11,
-    title: "aaa",
-    status: "new",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 12,
-    title: "bbb",
-    status: "voting",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 13,
-    title: "ccc",
-    status: "doing",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 14,
-    title: "ddd",
-    status: "reject",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-  {
-    suggestId: 15,
-    title: "eee",
-    status: "done",
-    startDate: dummyDate,
-    endDate: dummyDate,
-    description: "description",
-  },
-];
 
 const dummyPrizeList: Array<PrizeProps> = [
   {
@@ -320,13 +202,48 @@ const dummyPrizeList: Array<PrizeProps> = [
   },
 ];
 
+const getProposalList = (dataList: Array<any>) => {
+  return (
+    dataList.map((data: any) => {
+      const dataDescription = String(data.description);
+      const parsedDataDescription = JSON.parse(dataDescription);
+      const proposal: Proposal = {
+        id: Number(data.id),
+        proposalId: String(data.proposalId),
+        title: String(parsedDataDescription.title),
+        description: String(parsedDataDescription.description),
+        proposer: String(data.proposer),
+        start: Number(data.startBlock),
+        end: Number(data.endBlock),
+        status: Number(data.status),
+      }
+      return proposal;
+  }));
+};
+
 // TOP画面
 const TopPage: NextPage = () => {
   const router = useRouter();
-  const [selectedSuggestId, setSelectedSuggestId] = useState<number | undefined>(undefined);
+
+  // ThirdWebからcontractを取得
+  const contractJsonData = JSON.stringify(contractData);
+  const contractObject = JSON.parse(contractJsonData);
+  const { contract } = useContract("0x3b3B71Ac06e90f9D4D70B9485625e4Dfc8807900", contractObject); // new Contract
+
+  // contractからProposalのデータを取得
+  const { data: proposalResponse, isLoading } = useContractRead(contract, "getAllProjectProposals");
+  // chainから取得したProposalのデータをフロント川のProposalのオブジェクトに詰め替える
+  const proposalList = isLoading ? [] : getProposalList(proposalResponse);
+  console.log(proposalList);
+
+  // 詳細表示中のProposal
+  const [selectedProposalId, setSelectedProposalId] = useState<number | undefined>(undefined);
+  const selectedProposal = proposalList.find((proposal) => proposal.id == selectedProposalId);
+
+  // 詳細表示中のPrize
   const [selectedPrizeId, setSelectedPrizeId] = useState<number | undefined>(undefined);
-  const selectedSuggest = dummySuggestList.find((suggest) => suggest.suggestId == selectedSuggestId);
-  const selectedPrize = dummyPrizeList.find((suggest) => suggest.prizeId == selectedPrizeId);
+  const selectedPrize = dummyPrizeList.find((prize) => prize.prizeId == selectedPrizeId);
+
   return (
     <>
       <PageTemplate>
@@ -337,26 +254,26 @@ const TopPage: NextPage = () => {
             </NewsAreaTitle>
             <NewsList newsList={dummyNewsList} />
           </NewsArea>
-          <SuggestsAndPrizeArea>
-            <SuggestsArea>
-              <SuggestHeader>
-                <SuggestsAreaTitle>
-                  Suggests
-                </SuggestsAreaTitle>
-                <SuggestButton onClick={() => router.push('/admin')}>提案を提出</SuggestButton>
-              </SuggestHeader>
-              <SuggestList suggestList={dummySuggestList} changeOpenSuggestModal={setSelectedSuggestId} />
-            </SuggestsArea>
+          <ProposalAndPrizeArea>
+            <ProposalArea>
+              <ProposalHeader>
+                <ProposalAreaTitle>
+                  Proposals
+                </ProposalAreaTitle>
+                <ProposalButton onClick={() => router.push('/admin')}>提案を提出</ProposalButton>
+              </ProposalHeader>
+              <ProposalList proposalList={proposalList} changeOpenProposalModal={setSelectedProposalId} />
+            </ProposalArea>
             <PrizeArea>
               <PrizeAreaTitle>
                 PrizeArea
               </PrizeAreaTitle>
               <PrizeList prizeList={dummyPrizeList} changeOpenPrizeModal={setSelectedPrizeId} />
             </PrizeArea>
-          </SuggestsAndPrizeArea>
+          </ProposalAndPrizeArea>
         </Components>
       </PageTemplate>
-      <SuggestDetailModal selectedSuggest={selectedSuggest} setSelectedSuggestId={setSelectedSuggestId} />
+      <ProposalDetailModal selectedProposal={selectedProposal} setSelectedProposalId={setSelectedProposalId} />
       <PrizeDetailModal selectedPrize={selectedPrize} setSelectedPrizeId={setSelectedPrizeId} />
     </>
   );

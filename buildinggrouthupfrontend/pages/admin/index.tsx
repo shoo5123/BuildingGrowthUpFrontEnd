@@ -1,4 +1,5 @@
 import { PageTemplate } from "../../components/PageTemplate";
+import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -11,7 +12,7 @@ const PageTitle = styled.div`
   margin-bottom: 36px;
 `;
 
-const CreateSuggestArea = styled.div`
+const CreateProposalArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +70,7 @@ const ButtonArea = styled.div`
   justify-content: space-between;
 `;
 
-const CreateSuggestButton = styled.button`
+const CreateProposalButton = styled.button`
   height: 28px;
   padding: 0px 8px;
 `;
@@ -90,12 +91,26 @@ const getFormTitle = (title: string) => {
 
 const AdminPage: NextPage = () => {
   const router = useRouter();
+  const { contract } = useContract("0x54841235DC6CCae58bB308faE37bCD2605C23ada");
+  const { mutateAsync: propose, isLoading } = useContractWrite(contract, "propose");
+  const targets = ["0x2B38BA2E0C8251D02b61C4DFBEe161dbb6AE3e66"];
+  const values = [5];
+  const calldatas = ["0x4554480000000000000000000000000000000000000000000000000000000000"];
+  const description = "test5";
+  const callPropose = async () => {
+    try {
+      const data = await propose({ args: [targets, values, calldatas, description] });
+      console.info("contract call successs", data);
+    } catch (err) {
+      console.error("contract call failure", err);
+    }
+  };
   return (
     <PageTemplate>
       <PageTitle>
-        Create Suggest
+        Create Proposal
       </PageTitle>
-      <CreateSuggestArea>
+      <CreateProposalArea>
         <div>
           <FormLine>
             {getFormTitle("TITLE")}
@@ -111,10 +126,14 @@ const AdminPage: NextPage = () => {
           </FormLine>
         </div>
         <ButtonArea>
-          <CreateSuggestButton onClick={() => window.confirm("TODO: 送信処理の連携")}>提案作成</CreateSuggestButton>
+          <CreateProposalButton onClick={() => {
+            callPropose();
+          }}>
+            提案作成
+          </CreateProposalButton>
           <BackButton onClick={() => router.push('/')}>戻る</BackButton>
         </ButtonArea>
-      </CreateSuggestArea>
+      </CreateProposalArea>
     </PageTemplate>
   );
 };

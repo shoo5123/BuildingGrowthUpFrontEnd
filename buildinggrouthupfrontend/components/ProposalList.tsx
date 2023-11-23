@@ -1,5 +1,5 @@
-import { SuggestStatus } from "../const/SuggestStatus";
 import { FilterStatus } from "./FilterStatus";
+import { ProposalState } from "../enum/ProposalState";
 import styled from "styled-components";
 import {
   FaSeedling as SproutIcon,
@@ -17,16 +17,16 @@ import {
 import moment from "moment";
 import { useState } from "react";
 
-const SuggestArea = styled.div`
+const ProposalArea = styled.div`
   width: 700px;
 `;
 
-const SuggestListArea = styled.div`
+const ProposalListArea = styled.div`
   height: 380px;
   overflow: auto;
 `;
 
-const SuggestLine = styled.div`
+const ProposalLine = styled.div`
   height: 64px;
   padding: 0px 20px;
   margin: 8px 0px;
@@ -42,16 +42,16 @@ const SuggestLine = styled.div`
   }
 `;
 
-const SuggestTitle = styled.div`
+const ProposalTitle = styled.div`
   font-size: 18px;
 `;
 
-const SuggestLimitAndIconArea = styled.div`
+const ProposalLimitAndIconArea = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const SuggestLimitArea = styled.div`
+const ProposalLimitArea = styled.div`
   display: flex;
   align-items: center;
   height: 36px;
@@ -63,17 +63,19 @@ const SuggestLimitArea = styled.div`
 `;
 
 interface Props {
-  suggestList: Array<SuggestProps>;
-  changeOpenSuggestModal: (selectedSuggestId: number | undefined) => void;
+  proposalList: Array<Proposal>;
+  changeOpenProposalModal: (selectedProposalId: number | undefined) => void;
 }
 
-export interface SuggestProps {
-  suggestId: number;
+export interface Proposal {
+  id: number;
+  proposalId: string;
   title: string;
-  status: SuggestStatus;
-  startDate: string;
-  endDate: string;
   description: string;
+  proposer: string;
+  start: number;
+  end: number;
+  status: number;
 }
 
 /**
@@ -83,92 +85,94 @@ export interface SuggestProps {
  * @param finishDateStr 期限（YYYY-MM-DD）、statusがdoneの場合は完了日
  * @returns 期限までの日数の文字列
  */
-const getSuggestStatusLimit = (status: SuggestStatus, finishDateStr: string) => {
+const getProposalStatusLimit = (status: ProposalState, finishDateStr: string) => {
   const today = moment();
   const finishDate = moment(finishDateStr)
   const limitDay = finishDate.clone().diff(today, "days")
-  if (status == "done") {
+  if (status == ProposalState.Executed) {
     return (
-      <SuggestLimitArea>
+      <ProposalLimitArea>
         <CheckIcon size="16" />
         達成日 {finishDate.format("YYYY/MM/DD")}
-      </SuggestLimitArea>
+      </ProposalLimitArea>
     );
-  } else if (status == "reject") {
+  } else if (status == ProposalState.Defeated) {
     return (
-      <SuggestLimitArea>
+      <ProposalLimitArea>
         芽吹きませんでした
-      </SuggestLimitArea>
+      </ProposalLimitArea>
     );
   } else {
     return (
-      <SuggestLimitArea>
+      <ProposalLimitArea>
         <LimitIcon size="16" />
         次のステップまであと {limitDay} 日
-      </SuggestLimitArea>
+      </ProposalLimitArea>
     );
   }
 };
 
-const getSuggestStatusIcon = (status: SuggestStatus) => {
+const getProposalStatusIcon = (status: ProposalState) => {
   switch (status) {
-    case "new":
+    case ProposalState.Pending:
       return (
         <SeedIcon size="28" color="#228B22" />
       );
-    case "voting":
+    case ProposalState.Active:
       return (
         <SproutIcon size="28" color="#228B22" />
       );
-    case "doing":
+    case ProposalState.Succeeded:
       return (
         <GrowthIcon size="28" color="#228B22" />
       );
-    case "reject":
+    case ProposalState.Defeated:
       return (
         <RejectIcon size="28" color="#228B22" />
       );
-    case "done":
+    case ProposalState.Executed:
       return (
         <TreeIcon size="28" color="#228B22" />
       );
     }
 };
 
-export const SuggestList: React.FC<Props> = ({ suggestList, changeOpenSuggestModal }) => {
-  const [selectedStatus, setSelectedStatus] = useState<SuggestStatus | undefined>(undefined);
-  const onClickFilterStatusButton = (status: SuggestStatus) => {
+export const ProposalList: React.FC<Props> = ({ proposalList, changeOpenProposalModal }) => {
+  const dummyEndDate = "2023-11-11"; // TODO: タイムスタンプで返ってくるようになったらdummyをやめる
+  const [selectedStatus, setSelectedStatus] = useState<ProposalState | undefined>(undefined);
+  const onClickFilterStatusButton = (status: ProposalState) => {
     if (status == selectedStatus) {
       setSelectedStatus(undefined);
     } else {
       setSelectedStatus(status);
     }
   };
-  const selectedSuggestList = suggestList.filter((suggest) => {
-    if (!selectedStatus) {
-      return suggest;
+  const selectedProposalList = proposalList.filter((proposal) => {
+    if (selectedStatus == undefined) {
+      return proposal;
     } else {
-      return suggest.status == selectedStatus;
+      return proposal.status == selectedStatus;
     }
   });
   return (
-    <SuggestArea>
+    <ProposalArea>
       <FilterStatus selectedStatus={selectedStatus} onClick={onClickFilterStatusButton} />
-      <SuggestListArea>
-        {selectedSuggestList.map((suggest) => {
+      <ProposalListArea>
+        {selectedProposalList.map((proposal) => {
           return (
-            <SuggestLine onClick={() => {changeOpenSuggestModal(suggest.suggestId)}}>
-              <SuggestTitle>
-                {suggest.title}
-              </SuggestTitle>
-              <SuggestLimitAndIconArea>
-                {getSuggestStatusLimit(suggest.status, suggest.endDate)}
-                {getSuggestStatusIcon(suggest.status)}
-              </SuggestLimitAndIconArea>
-            </SuggestLine>
+            <ProposalLine key={proposal.id} onClick={() => {changeOpenProposalModal(proposal.id)}}>
+              <ProposalTitle>
+                {proposal.title}
+              </ProposalTitle>
+              <ProposalLimitAndIconArea>
+                {/* {getProposalStatusLimit(proposal.status, proposal.end)} */}
+                {getProposalStatusLimit(proposal.status, dummyEndDate)}
+                {getProposalStatusIcon(proposal.status)}
+              </ProposalLimitAndIconArea>
+            </ProposalLine>
           );
         })}
-      </SuggestListArea>
-    </SuggestArea>
+      </ProposalListArea>
+    </ProposalArea>
   );
 };

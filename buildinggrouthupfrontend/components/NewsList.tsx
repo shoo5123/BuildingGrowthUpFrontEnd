@@ -45,6 +45,7 @@ interface Props {
 }
 
 export interface NewsProps {
+  newsId: number;
   newsType: NewsType;
   description: string;
   listingDate: string;
@@ -67,7 +68,7 @@ export const NewsList: React.FC<Props> = ({ newsList }) => {
     <NewsListArea>
       {newsList.map((news) => {
         return (
-          <NewsLine>
+          <NewsLine key={news.newsId}>
             <NewsIconAndDescriptionArea>
               <IconArea>
                 {getNewsIcon(news.newsType)}

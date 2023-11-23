@@ -1,4 +1,4 @@
-import { useChain, useAddress } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { GiFruitBowl as FruitIcon } from "react-icons/gi";
@@ -92,7 +92,6 @@ interface Props {
 export const PageTemplate: React.FC<Props> = ({ children }) => {
   const address = useAddress();
   const router = useRouter();
-  const chain = useChain();
   return (
     <>
       <HeaderTemplate>
@@ -102,6 +101,7 @@ export const PageTemplate: React.FC<Props> = ({ children }) => {
         </PageIconAndTitleArea>
         <PageRouterAndAccountArea>
           <PageRouterArea>
+            <ConnectWallet />
             <PageRouterButton onClick={() => router.push('/')}>Top</PageRouterButton>
             <PageRouterButton onClick={() => router.push('/admin')}>Admin</PageRouterButton>
           </PageRouterArea>

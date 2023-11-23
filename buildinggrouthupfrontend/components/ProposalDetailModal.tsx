@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SuggestProps } from "./SuggestList";
+import { Proposal } from "./ProposalList";
 
 const OverlayDiv = styled.div`
   position:fixed;
@@ -20,7 +20,7 @@ const ModalComponent = styled.div`
   background: #FFFFFF;
 `;
 
-const SuggestTitleArea = styled.div`
+const ProposalTitleArea = styled.div`
   height: 62px;
   padding-left: 8px;
   margin-bottom: 8px;
@@ -28,7 +28,7 @@ const SuggestTitleArea = styled.div`
   font-weight: bold;
 `;
 
-const SuggestDescriptionArea = styled.div`
+const ProposalDescriptionArea = styled.div`
   height: 400px;
   border-top: solid 1px #000000;
   border-bottom: solid 1px #000000;
@@ -59,23 +59,23 @@ const CloseModalButton = styled.div`
 `;
 
 interface Props {
-  selectedSuggest: SuggestProps | undefined;
-  setSelectedSuggestId: (selectedSuggestId: number | undefined) => void;
+  selectedProposal: Proposal | undefined;
+  setSelectedProposalId: (selectedProposalId: number | undefined) => void;
 };
 
-const SuggestDetailModal: React.FC<Props> = ({ selectedSuggest, setSelectedSuggestId }) => {
-  if (selectedSuggest != undefined) {
+const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedProposalId }) => {
+  if (selectedProposal != undefined) {
     return (
       <OverlayDiv>
         <ModalComponent>
-          <SuggestTitleArea>
-            {selectedSuggest.title}
-          </SuggestTitleArea>
-          <SuggestDescriptionArea>
-            {selectedSuggest.description}
-          </SuggestDescriptionArea>
+          <ProposalTitleArea>
+            {selectedProposal.title}
+          </ProposalTitleArea>
+          <ProposalDescriptionArea>
+            {selectedProposal.description}
+          </ProposalDescriptionArea>
           <ButtonArea>
-            <CloseModalButton onClick={() => setSelectedSuggestId(undefined)}>
+            <CloseModalButton onClick={() => setSelectedProposalId(undefined)}>
               閉じる
             </CloseModalButton>
           </ButtonArea>
@@ -87,4 +87,4 @@ const SuggestDetailModal: React.FC<Props> = ({ selectedSuggest, setSelectedSugge
   }
 };
 
-export default SuggestDetailModal;
+export default ProposalDetailModal;
