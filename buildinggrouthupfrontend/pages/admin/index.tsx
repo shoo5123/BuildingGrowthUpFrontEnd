@@ -5,6 +5,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import contractData from "../../contract/custom_abi.json";
+import { web3 } from "web3";
 
 const FORM_COMPONENT_WIDTH = 480;
 
@@ -112,20 +113,25 @@ const AdminPage: NextPage = () => {
   // const targets = ["0x3b3B71Ac06e90f9D4D70B9485625e4Dfc8807900"];
   const targets = ["0x2B38BA2E0C8251D02b61C4DFBEe161dbb6AE3e66"];
   const values = [5];
-  // const calldatas = ["0x4554480000000000000000000000000000000000000000000000000000000000"];
-  // TODO calldatasの生成
-  // プレーンのmethod nameを定義
-  // 引数をstringで生成
-  // プレーンmethod name と 引数のstringを２つ合わせてエンコード
-  // エンコードの文字列からmethod idを特定
-  // 引数の文字列をエンコード
-  // medhod idとエンコードした引数の文字列を連結
+
+  const createCalldata = async(offer: string) => {
+    const calldataMethodName = "transfer";
+    const toAddress = offer;
+    const transferValue = "50";
+    
+    const methodId = web3.abi.encodeFunctionSignature(calldataMethodName+"("+toAddress+","+transferValue+")");
+    const toAddressEncoded = web3.abi.encodeParameter("address", toAddress);
+    const transferValueEncoded = web3.abi.encodeParameter("uint256", transferValue); // 10^18付与が必要かも
+
+    return (methodId + toAddressEncoded + transferValueEncoded);
+  };  
+
   const calldatas = ["0x4554480000000000000000000000000000000000000000000000000000000000"];
   // const description = "test5"; // TODO: { title: string, description: string }の形のjson形式で投げるようにする
   // const offers = ["", ""]; // TODO: offerする企業名のリスト
-  const callPropose = async (description: string, offers: Array<string>) => {
+  const callPropose = async (calldata:Array<string>, description: string, offers: Array<string>) => {
     try {
-      const data = await proposeWithOffers({ args: [targets, values, calldatas, description, offers] });
+      const data = await proposeWithOffers({ args: [targets, values, calldata, description, offers] });
       console.info("contract call successs", data);
     } catch (err) {
       console.error("contract call failure", err);
@@ -138,17 +144,26 @@ const AdminPage: NextPage = () => {
       description: "",
       offers: [],
     } as ProposalRequestParam,
-    onSubmit: (values: ProposalRequestParam) => {
+    onSubmit: async (values: ProposalRequestParam) => {
       console.log(values);
+
+     
       const paramOffers = values.offers.filter((offer) => {
         return offer != "";
       });
+
+      const calldata = new Array<string>();
+
+      for (const offer of paramOffers) {
+        calldata.push(await createCalldata(offer));
+      }
+      
       const paramDescriptionObject = {
         title: values.title,
         description: values.description
       };
       const paramDescriptionJsonText = JSON.stringify(paramDescriptionObject);
-      callPropose(paramDescriptionJsonText, paramOffers);
+      callPropose(calldata, paramDescriptionJsonText, paramOffers);
     },
   });
 
