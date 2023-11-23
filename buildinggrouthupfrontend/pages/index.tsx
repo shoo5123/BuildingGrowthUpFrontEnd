@@ -4,7 +4,7 @@ import { ProposalList, Proposal } from "../components/ProposalList";
 import { PrizeList, PrizeProps } from "../components/PrizeList";
 import ProposalDetailModal from "../components/ProposalDetailModal";
 import PrizeDetailModal from "../components/PrizeDetailModal";
-import { useContract, useContractRead } from "@thirdweb-dev/react";
+import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -224,17 +224,35 @@ const getProposalList = (dataList: Array<any>) => {
 // TOP画面
 const TopPage: NextPage = () => {
   const router = useRouter();
+  const address = useAddress();
 
   // ThirdWebからcontractを取得
   const contractJsonData = JSON.stringify(contractData);
   const contractObject = JSON.parse(contractJsonData);
-  const { contract } = useContract("0x3b3B71Ac06e90f9D4D70B9485625e4Dfc8807900", contractObject); // new Contract
+  const { contract } = useContract("0x63F4a29Bb25920E563144bbbcE4B15f8D1120C90", contractObject); // new Contract
 
   // contractからProposalのデータを取得
-  const { data: proposalResponse, isLoading } = useContractRead(contract, "getAllProjectProposals");
+  const { data: proposalResponse, isLoading: isLoadingGetProposal } = useContractRead(contract, "getAllProjectProposals");
   // chainから取得したProposalのデータをフロント川のProposalのオブジェクトに詰め替える
-  const proposalList = isLoading ? [] : getProposalList(proposalResponse);
+  const proposalList = isLoadingGetProposal ? [] : getProposalList(proposalResponse);
   console.log(proposalList);
+
+  // 投票関数
+  const { mutateAsync: castVote, isLoading: isLoadingCallCastVote } = useContractWrite(contract, "castVote");
+  const callCastVote = async (proposalId: string, support: number) => {
+    try {
+      const castVoteResult = await castVote({ args: [proposalId, support] });
+      console.log("call castVote success", castVoteResult);
+    } catch (e) {
+      console.error("call castVote failure", e);
+    }
+  }
+
+  // 投票済みフラグ取得
+  const getHasVoted = (proposalId: string) => {
+    const { data: hasVoted } = useContractRead(contract, "hasVoted", [proposalId, address]);
+    return hasVoted;
+  }
 
   // 詳細表示中のProposal
   const [selectedProposalId, setSelectedProposalId] = useState<number | undefined>(undefined);
@@ -273,7 +291,12 @@ const TopPage: NextPage = () => {
           </ProposalAndPrizeArea>
         </Components>
       </PageTemplate>
-      <ProposalDetailModal selectedProposal={selectedProposal} setSelectedProposalId={setSelectedProposalId} />
+      <ProposalDetailModal
+        selectedProposal={selectedProposal}
+        setSelectedProposalId={setSelectedProposalId}
+        castVote={callCastVote}
+        getHasVoted={getHasVoted}
+      />
       <PrizeDetailModal selectedPrize={selectedPrize} setSelectedPrizeId={setSelectedPrizeId} />
     </>
   );

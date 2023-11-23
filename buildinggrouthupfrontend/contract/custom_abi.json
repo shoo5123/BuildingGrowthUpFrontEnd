@@ -27,6 +27,11 @@
     },
     {
         "inputs": [],
+        "name": "CheckpointUnorderedInsertion",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "FailedInnerCall",
         "type": "error"
     },
@@ -97,6 +102,22 @@
             }
         ],
         "name": "GovernorInvalidProposalLength",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "quorumNumerator",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "quorumDenominator",
+                "type": "uint256"
+            }
+        ],
+        "name": "GovernorInvalidQuorumFraction",
         "type": "error"
     },
     {
@@ -375,6 +396,25 @@
             }
         ],
         "name": "ProposalQueued",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "oldQuorumNumerator",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "newQuorumNumerator",
+                "type": "uint256"
+            }
+        ],
+        "name": "QuorumNumeratorUpdated",
         "type": "event"
     },
     {
@@ -1463,11 +1503,6 @@
                 "internalType": "string",
                 "name": "description",
                 "type": "string"
-            },
-            {
-                "internalType": "string[]",
-                "name": "offers",
-                "type": "string[]"
             }
         ],
         "name": "propose",
@@ -1502,9 +1537,14 @@
                 "internalType": "string",
                 "name": "description",
                 "type": "string"
+            },
+            {
+                "internalType": "string[]",
+                "name": "offers",
+                "type": "string[]"
             }
         ],
-        "name": "propose",
+        "name": "proposeWithOffers",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1558,6 +1598,51 @@
             }
         ],
         "name": "quorum",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "quorumDenominator",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "timepoint",
+                "type": "uint256"
+            }
+        ],
+        "name": "quorumNumerator",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "quorumNumerator",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1640,6 +1725,19 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "newQuorumNumerator",
+                "type": "uint256"
+            }
+        ],
+        "name": "updateQuorumNumerator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

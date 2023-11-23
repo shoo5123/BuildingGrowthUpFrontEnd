@@ -1,5 +1,9 @@
-import styled from "styled-components";
 import { Proposal } from "./ProposalList";
+import { ProposalState } from "../enum/ProposalState";
+import { VoteType } from "../enum/VoteType";
+import styled from "styled-components";
+
+const BUTTON_HEIGHT = 48;
 
 const OverlayDiv = styled.div`
   position:fixed;
@@ -35,15 +39,21 @@ const ProposalDescriptionArea = styled.div`
 `;
 
 const ButtonArea = styled.div`
-  height: 64px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const CloseModalButton = styled.div`
-  height: 48px;
-  margin: 8px 0px;
+const ButtonsArea = styled.div`
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+const ButtonComponent = styled.button`
+  height: ${BUTTON_HEIGHT}px;
   padding: 0px 16px;
   background: #e0e0e0;
   display: flex;
@@ -61,10 +71,52 @@ const CloseModalButton = styled.div`
 interface Props {
   selectedProposal: Proposal | undefined;
   setSelectedProposalId: (selectedProposalId: number | undefined) => void;
+  castVote: (proposalId: string, support: number) => void;
+  getHasVoted: (proposalId: string) => boolean;
 };
 
-const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedProposalId }) => {
+const getButtonsArea = (
+  proposalStatus: ProposalState,
+  setSelectedProposalId: (id: number | undefined) => void,
+  castVote: (voteType: VoteType) => void,
+  hasVoted: boolean
+) => {
+  if (proposalStatus == ProposalState.Active) {
+    return (
+      <ButtonsArea>
+        <ButtonComponent
+          onClick={() => {
+            castVote(VoteType.For);
+            setSelectedProposalId(undefined);
+          }}
+          disabled={hasVoted}
+        >
+          賛成
+        </ButtonComponent>
+        <ButtonComponent
+          onClick={() => {
+            castVote(VoteType.Against)
+            setSelectedProposalId(undefined);
+          }}
+          disabled={hasVoted}
+        >
+          否決
+        </ButtonComponent>
+        <ButtonComponent onClick={() => setSelectedProposalId(undefined)}>閉じる</ButtonComponent>
+      </ButtonsArea>
+    );
+  } else {
+    return (
+      <ButtonsArea>
+        <ButtonComponent onClick={() => setSelectedProposalId(undefined)}>閉じる</ButtonComponent>
+      </ButtonsArea>
+    );
+  }
+}
+
+const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedProposalId, castVote, getHasVoted }) => {
   if (selectedProposal != undefined) {
+    const hasVoted = getHasVoted(selectedProposal.proposalId);
     return (
       <OverlayDiv>
         <ModalComponent>
@@ -75,9 +127,12 @@ const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedPro
             {selectedProposal.description}
           </ProposalDescriptionArea>
           <ButtonArea>
-            <CloseModalButton onClick={() => setSelectedProposalId(undefined)}>
-              閉じる
-            </CloseModalButton>
+            {getButtonsArea(
+              selectedProposal.status,
+              setSelectedProposalId,
+              (voteType: VoteType) => castVote(selectedProposal.proposalId, voteType),
+              hasVoted
+            )}
           </ButtonArea>
         </ModalComponent>
       </OverlayDiv>
