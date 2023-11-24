@@ -35,7 +35,7 @@ const PrizeDescriptionArea = styled.div`
 `;
 
 const ButtonArea = styled.div`
-  height: 64px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +43,6 @@ const ButtonArea = styled.div`
 
 const CloseModalButton = styled.div`
   height: 48px;
-  margin: 8px 0px;
   padding: 0px 16px;
   background: #e0e0e0;
   display: flex;

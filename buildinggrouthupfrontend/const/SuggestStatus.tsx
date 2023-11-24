@@ -1,1 +1,0 @@
-export type SuggestStatus = "new" | "voting" | "doing" | "reject" | "done";

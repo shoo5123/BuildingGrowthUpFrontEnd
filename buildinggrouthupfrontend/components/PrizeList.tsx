@@ -56,7 +56,7 @@ export const PrizeList: React.FC<Props> = ({ prizeList, changeOpenPrizeModal }) 
     <PrizeArea>
       {prizeList.map((prize) => {
         return (
-          <PrizeLine onClick={() => changeOpenPrizeModal(prize.prizeId)}>
+          <PrizeLine key={prize.prizeId} onClick={() => changeOpenPrizeModal(prize.prizeId)}>
             <PrizeTitle>{prize.title}</PrizeTitle>
             <PrizePriceArea>
               <FruitIcon size="24" color="#F5EF6C" />

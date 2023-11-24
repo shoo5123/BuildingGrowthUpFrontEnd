@@ -8,8 +8,8 @@ import {
   GiGroundSprout as RejectIcon,
   GiPlantSeed as SeedIcon,
   GiPlantWatering as GrowthIcon,
-} from "react-icons/gi"
-import { SuggestStatus } from "../const/SuggestStatus";
+} from "react-icons/gi";
+import { ProposalState } from "../enum/ProposalState";
 
 const FilterArea = styled.div`
   height: 96px;
@@ -28,7 +28,7 @@ const FilterStatusArea = styled.div`
   margin-left: auto;
 `;
 
-const DoingAndRejectButtonArea = styled.div`
+const SucceededAndDefeatedButtonArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,14 +61,14 @@ const StatusTitle = styled.div`
 `;
 
 interface Props {
-  selectedStatus: SuggestStatus | undefined;
-  onClick: (status: SuggestStatus) => void;
+  selectedStatus: ProposalState | undefined;
+  onClick: (status: ProposalState) => void;
 };
 
 interface StatusButtonProps {
-  status: SuggestStatus;
-  selectedStatus: SuggestStatus | undefined;
-  onClick: (status: SuggestStatus) => void;
+  status: ProposalState;
+  selectedStatus: ProposalState | undefined;
+  onClick: (status: ProposalState) => void;
 };
 
 const getRightIconDiv = () => {
@@ -80,45 +80,45 @@ const getRightIconDiv = () => {
 };
 
 const FilterStatusButton: React.FC<StatusButtonProps> = ({ status, selectedStatus, onClick }) => {
-  if (status == "new") {
+  if (status == ProposalState.Pending) {
     return (
-      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus=="new"}>
+      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus==ProposalState.Pending}>
         <StatusTitle>
           投票前
         </StatusTitle>
         <SeedIcon size="16" color="#228B22" />
       </FilterButtonDiv>
     );
-  } else if (status == "voting") {
+  } else if (status == ProposalState.Active) {
     return (
-      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus=="voting"}>
+      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus==ProposalState.Active}>
         <StatusTitle>
           検討中
         </StatusTitle>
         <SproutIcon size="16" color="#228B22" />
       </FilterButtonDiv>
     );
-  } else if (status == "doing") {
+  } else if (status == ProposalState.Succeeded) {
     return (
-      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus=="doing"}>
+      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus==ProposalState.Succeeded}>
         <StatusTitle>
           プロジェクト進行中
         </StatusTitle>
         <GrowthIcon size="16" color="#228B22" />
       </FilterButtonDiv>
     );
-  } else if (status == "reject") {
+  } else if (status == ProposalState.Defeated) {
     return (
-      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus=="reject"}>
+      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus==ProposalState.Defeated}>
         <StatusTitle>
           否決
         </StatusTitle>
         <RejectIcon size="16" color="#228B22" />
       </FilterButtonDiv>
     );
-  } else if (status == "done") {
+  } else if (status == ProposalState.Executed) {
     return (
-      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus=="done"}>
+      <FilterButtonDiv onClick={() => onClick(status)} isSelected={selectedStatus==ProposalState.Executed}>
         <StatusTitle>
           プロジェクト完了
         </StatusTitle>
@@ -133,17 +133,17 @@ export const FilterStatus: React.FC<Props> = ({ selectedStatus, onClick }) => {
     <FilterArea>
       <FilterTitle>Filter:</FilterTitle>
       <FilterStatusArea>
-        <FilterStatusButton status={"new"} selectedStatus={selectedStatus} onClick={onClick} />
+        <FilterStatusButton status={ProposalState.Pending} selectedStatus={selectedStatus} onClick={onClick} />
         {getRightIconDiv()}
-        <FilterStatusButton status={"voting"} selectedStatus={selectedStatus} onClick={onClick} />
+        <FilterStatusButton status={ProposalState.Active} selectedStatus={selectedStatus} onClick={onClick} />
         {getRightIconDiv()}
-        <DoingAndRejectButtonArea>
-          <FilterStatusButton status={"doing"} selectedStatus={selectedStatus} onClick={onClick} />
+        <SucceededAndDefeatedButtonArea>
+          <FilterStatusButton status={ProposalState.Succeeded} selectedStatus={selectedStatus} onClick={onClick} />
           <OrDiv>or</OrDiv>
-          <FilterStatusButton status={"reject"} selectedStatus={selectedStatus} onClick={onClick} />
-        </DoingAndRejectButtonArea>
+          <FilterStatusButton status={ProposalState.Defeated} selectedStatus={selectedStatus} onClick={onClick} />
+        </SucceededAndDefeatedButtonArea>
         {getRightIconDiv()}
-        <FilterStatusButton status={"done"} selectedStatus={selectedStatus} onClick={onClick} />
+        <FilterStatusButton status={ProposalState.Executed} selectedStatus={selectedStatus} onClick={onClick} />
       </FilterStatusArea>
     </FilterArea>
   );
