@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import contractData from "../../contract/custom_abi.json";
-import { web3 } from "web3";
+import { Web3 } from "web3";
 
 const FORM_COMPONENT_WIDTH = 480;
 
@@ -114,17 +114,18 @@ const AdminPage: NextPage = () => {
   const targets = ["0x2B38BA2E0C8251D02b61C4DFBEe161dbb6AE3e66"];
   const values = [5];
 
-  const createCalldata = async(offer: string) => {
+  const createCalldata = (toAddress: string): string => {
     const calldataMethodName = "transfer";
-    const toAddress = offer;
     const transferValue = "50";
-    
-    const methodId = web3.abi.encodeFunctionSignature(calldataMethodName+"("+toAddress+","+transferValue+")");
-    const toAddressEncoded = web3.abi.encodeParameter("address", toAddress);
-    const transferValueEncoded = web3.abi.encodeParameter("uint256", transferValue); // 10^18付与が必要かも
+
+    const web3 = new Web3();
+    // const methodId = web3.eth.abi.encodeFunctionSignature(calldataMethodName+"("+toAddress+","+transferValue+")");
+    const methodId = web3.eth.abi.encodeFunctionSignature(`${calldataMethodName}(${toAddress}${transferValue})`);
+    const toAddressEncoded = web3.eth.abi.encodeParameter("address", toAddress);
+    const transferValueEncoded = web3.eth.abi.encodeParameter("uint256", transferValue); // 10^18付与が必要かも
 
     return (methodId + toAddressEncoded + transferValueEncoded);
-  };  
+  };
 
   const calldatas = ["0x4554480000000000000000000000000000000000000000000000000000000000"];
   // const description = "test5"; // TODO: { title: string, description: string }の形のjson形式で投げるようにする
@@ -144,10 +145,9 @@ const AdminPage: NextPage = () => {
       description: "",
       offers: [],
     } as ProposalRequestParam,
-    onSubmit: async (values: ProposalRequestParam) => {
+    onSubmit: (values: ProposalRequestParam) => {
       console.log(values);
 
-     
       const paramOffers = values.offers.filter((offer) => {
         return offer != "";
       });
@@ -155,15 +155,16 @@ const AdminPage: NextPage = () => {
       const calldata = new Array<string>();
 
       for (const offer of paramOffers) {
-        calldata.push(await createCalldata(offer));
+        calldata.push(createCalldata(offer));
       }
-      
+
       const paramDescriptionObject = {
         title: values.title,
         description: values.description
       };
       const paramDescriptionJsonText = JSON.stringify(paramDescriptionObject);
-      callPropose(calldata, paramDescriptionJsonText, paramOffers);
+      // callPropose(calldata, paramDescriptionJsonText, paramOffers);
+      console.log(calldata);
     },
   });
 
