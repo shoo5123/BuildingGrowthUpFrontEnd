@@ -110,7 +110,6 @@ const AdminPage: NextPage = () => {
   const contractObject = JSON.parse(contractJsonData);
   const { contract } = useContract("0x63F4a29Bb25920E563144bbbcE4B15f8D1120C90", contractObject);
   const { mutateAsync: proposeWithOffers, isLoading } = useContractWrite(contract, "proposeWithOffers");
-  // const targets = ["0x3b3B71Ac06e90f9D4D70B9485625e4Dfc8807900"];
   const targets = ["0x2B38BA2E0C8251D02b61C4DFBEe161dbb6AE3e66"];
   const values = [5];
 
@@ -119,17 +118,20 @@ const AdminPage: NextPage = () => {
     const transferValue = "50";
 
     const web3 = new Web3();
-    // const methodId = web3.eth.abi.encodeFunctionSignature(calldataMethodName+"("+toAddress+","+transferValue+")");
-    const methodId = web3.eth.abi.encodeFunctionSignature(`${calldataMethodName}(${toAddress}${transferValue})`);
-    const toAddressEncoded = web3.eth.abi.encodeParameter("address", toAddress);
-    const transferValueEncoded = web3.eth.abi.encodeParameter("uint256", transferValue); // 10^18付与が必要かも
-
-    return (methodId + toAddressEncoded + transferValueEncoded);
+    return web3.eth.abi.encodeFunctionCall({
+      name: 'transfer',
+      type: 'function',
+      inputs: [{
+          type: 'address',
+          name: 'recipient'
+      },{
+          type: 'uint256',
+          name: 'amount'
+      }]
+    }, [toAddress, transferValue]);
   };
 
-  const calldatas = ["0x4554480000000000000000000000000000000000000000000000000000000000"];
-  // const description = "test5"; // TODO: { title: string, description: string }の形のjson形式で投げるようにする
-  // const offers = ["", ""]; // TODO: offerする企業名のリスト
+  // 提案作成実行
   const callPropose = async (calldata:Array<string>, description: string, offers: Array<string>) => {
     try {
       const data = await proposeWithOffers({ args: [targets, values, calldata, description, offers] });
@@ -163,8 +165,8 @@ const AdminPage: NextPage = () => {
         description: values.description
       };
       const paramDescriptionJsonText = JSON.stringify(paramDescriptionObject);
-      // callPropose(calldata, paramDescriptionJsonText, paramOffers);
       console.log(calldata);
+      callPropose(calldata, paramDescriptionJsonText, paramOffers);
     },
   });
 
