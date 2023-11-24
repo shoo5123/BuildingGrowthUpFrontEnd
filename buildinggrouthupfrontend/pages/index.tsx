@@ -101,8 +101,6 @@ const getProposalList = (dataList: Array<any>) => {
   // TimeStamp型のstart, endをYYYY-MM-DDのフォーマットに変換
   const startDate = moment(dummyStartDateTimeStamp).format("YYYY-MM-DD");
   const endDate = moment(dummyEndDateTimeStamp).format("YYYY-MM-DD");
-  console.log(startDate);
-  console.log(endDate);
 
   return (
     dataList.map((data: any) => {
@@ -211,7 +209,7 @@ const TopPage: NextPage = () => {
       const executeResult = await execute({ args: [param.targets, param.values, param.calldatas, createHashedDescription(param.description)] });
       console.log("call execute success", executeResult);
     } catch (e) {
-      console.error("call castVote failure", e);
+      console.error("call execute failure", e);
     }
   }
 
