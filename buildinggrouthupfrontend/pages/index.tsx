@@ -1,6 +1,6 @@
 import { PageTemplate } from "../components/PageTemplate";
 import { NewsList, NewsProps } from "../components/NewsList";
-import { ProposalList, Proposal } from "../components/ProposalList";
+import { ProposalList, Proposal, ExecuteParam } from "../components/ProposalList";
 import { PrizeList, PrizeProps } from "../components/PrizeList";
 import ProposalDetailModal from "../components/ProposalDetailModal";
 import PrizeDetailModal from "../components/PrizeDetailModal";
@@ -9,7 +9,11 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useState } from "react";
+import moment from "moment";
+import { Web3 } from "web3";
 import contractData from "../contract/custom_abi.json";
+import dummyPrizeList from "../resources/mock/dummyPrizeList.json";
+import dummyNewsList from "../resources/mock/dummyNewsList.json";
 
 const Components = styled.div`
   display: flex;
@@ -89,134 +93,62 @@ const PrizeAreaTitle = styled.div`
   font-weight: bold;
 `;
 
-// const dummyDate = moment().format('YYYY-MM-DD HH:mm');
-const dummyDate = "2023-11-20 01:00";
-
-const dummyNewsList: Array<NewsProps> = [
-  {
-    newsId: 1,
-    newsType: "new",
-    description: "クリスマスイベントが開催されるかも・・",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 2,
-    newsType: "done",
-    description: "ハロウィンイベントが大盛況でした！",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 3,
-    newsType: "new",
-    description: "エレベーターの混雑が緩和されるかも！^^",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 4,
-    newsType: "done",
-    description: "A社とB社の共同展覧会が開催されました！",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 5,
-    newsType: "new",
-    description: "お正月のおせちをみんなで作りませんか？",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 6,
-    newsType: "done",
-    description: "上期の大感謝セールの口コミが大好評でした！",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 7,
-    newsType: "new",
-    description: "日曜日のカフェ難民を皆さんで救いましょう！",
-    listingDate: dummyDate,
-  },
-  {
-    newsId: 8,
-    newsType: "done",
-    description: "ショーケースイベントにD社とE社で参加しました！",
-    listingDate: dummyDate,
-  },
-]
-
-const dummyPrizeList: Array<PrizeProps> = [
-  {
-    prizeId: 1,
-    title: "aaaaa",
-    imageUrl: "../images/image1.png",
-    description: "ああああああああああああああああああ",
-    prizeFruit: 10,
-  },
-  {
-    prizeId: 2,
-    title: "bbbbb",
-    imageUrl: "../images/image2.png",
-    description: "いいいいいいいいいいいいいいいいいい",
-    prizeFruit: 20,
-  },
-  {
-    prizeId: 3,
-    title: "ccccc",
-    imageUrl: "../images/image3.png",
-    description: "うううううううううううううううううう",
-    prizeFruit: 30,
-  },
-  {
-    prizeId: 4,
-    title: "ddddd",
-    imageUrl: "../images/image4.png",
-    description: "ええええええええええええええええええ",
-    prizeFruit: 40,
-  },
-  {
-    prizeId: 5,
-    title: "aaaaa",
-    imageUrl: "../images/image1.png",
-    description: "ああああああああああああああああああ",
-    prizeFruit: 10,
-  },
-  {
-    prizeId: 6,
-    title: "bbbbb",
-    imageUrl: "../images/image2.png",
-    description: "いいいいいいいいいいいいいいいいいい",
-    prizeFruit: 20,
-  },
-  {
-    prizeId: 7,
-    title: "ccccc",
-    imageUrl: "../images/image3.png",
-    description: "うううううううううううううううううう",
-    prizeFruit: 30,
-  },
-  {
-    prizeId: 8,
-    title: "ddddd",
-    imageUrl: "../images/image4.png",
-    description: "ええええええええええええええええええ",
-    prizeFruit: 40,
-  },
-];
-
 const getProposalList = (dataList: Array<any>) => {
+  // TODO: 今後startBlock、endBlockはTimeStamp型で返ってくる予定
+  const dummyStartDateTimeStamp = new Date(2023,10,11,10,0).getTime();
+  const dummyEndDateTimeStamp = new Date(2023,10,22,10,0).getTime();
+
+  // TimeStamp型のstart, endをYYYY-MM-DDのフォーマットに変換
+  const startDate = moment(dummyStartDateTimeStamp).format("YYYY-MM-DD");
+  const endDate = moment(dummyEndDateTimeStamp).format("YYYY-MM-DD");
+  console.log(startDate);
+  console.log(endDate);
+
   return (
     dataList.map((data: any) => {
-      const dataDescription = String(data.description);
+      // data.descriptionをjson型のオブジェクトにキャスト
+      const dataDescription = String(data[2]);
       const parsedDataDescription = JSON.parse(dataDescription);
+
+      // data.targetsをstringのArrayにキャスト
+      const dataTargets = data[7] as Array<any>;
+      const targets = dataTargets.map(dataTarget => {
+        return String(dataTarget);
+      });
+
+      // data.valuesをnumberのArrayにキャスト
+      const dataValues = data[8] as Array<any>;
+      const values = dataValues.map(dataValue => {
+        return Number(dataValue);
+      });
+
+      // data.calldatasをstringのArrayにキャスト
+      const dataCalldatas = data[9] as Array<any>;
+      const calldatas = dataCalldatas.map(dataCalldata => {
+        return String(dataCalldata);
+      });
+
+      const executeParam: ExecuteParam = {
+        targets: targets,
+        values: values,
+        calldatas: calldatas,
+        description: dataDescription,
+      }
+
       const proposal: Proposal = {
-        id: Number(data.id),
-        proposalId: String(data.proposalId),
+        id: Number(data[0]),
+        proposalId: String(data[1]),
         title: String(parsedDataDescription.title),
         description: String(parsedDataDescription.description),
-        proposer: String(data.proposer),
-        start: Number(data.startBlock),
-        end: Number(data.endBlock),
-        status: Number(data.status),
+        proposer: String(data[3]),
+        // start: Number(data.startBlock),
+        start: startDate, // TODO: 今後startBlockがタイムスタンプになる予定
+        // end: Number(data.endBlock),
+        end: endDate, // TODO: 今後endBlockがタイムスタンプになる予定
+        status: Number(data[6]),
+        executeParam: executeParam,
       }
+
       return proposal;
   }));
 };
@@ -229,13 +161,21 @@ const TopPage: NextPage = () => {
   // ThirdWebからcontractを取得
   const contractJsonData = JSON.stringify(contractData);
   const contractObject = JSON.parse(contractJsonData);
-  const { contract } = useContract("0x63F4a29Bb25920E563144bbbcE4B15f8D1120C90", contractObject); // new Contract
+  const { contract } = useContract("0xEe9510E3579Ba31ca96b213dCe077f5c66b17c19", contractObject); // new Contract
 
   // contractからProposalのデータを取得
   const { data: proposalResponse, isLoading: isLoadingGetProposal } = useContractRead(contract, "getAllProjectProposals");
   // chainから取得したProposalのデータをフロント川のProposalのオブジェクトに詰め替える
   const proposalList = isLoadingGetProposal ? [] : getProposalList(proposalResponse);
   console.log(proposalList);
+
+  // Prizeのデータを取得 TODO: PrizeList取得は将来的に実装(現状はダミーデータを使用する)
+  const dummyPrizeListData = JSON.stringify(dummyPrizeList);
+  const prizeList: Array<PrizeProps> = JSON.parse(dummyPrizeListData);
+
+  // Prizeのデータを取得 TODO: PrizeList取得は将来的に実装(現状はダミーデータを使用する)
+  const dummyNewsListData = JSON.stringify(dummyNewsList);
+  const newsList: Array<NewsProps> = JSON.parse(dummyNewsListData);
 
   // 投票関数
   const { mutateAsync: castVote, isLoading: isLoadingCallCastVote } = useContractWrite(contract, "castVote");
@@ -254,13 +194,34 @@ const TopPage: NextPage = () => {
     return hasVoted;
   }
 
+  const createHashedDescription = (paramDescription: string) => {
+    const web3 = new Web3();
+    const hexDescription = web3.utils.utf8ToHex(paramDescription);
+    const hashedDescription = web3.utils.soliditySha3(hexDescription);
+
+    return hashedDescription;
+  }
+
+  // execute実行
+  const { mutateAsync: execute, isLoading: isLoadingCallExecute } = useContractWrite(contract, "execute");
+  const callExecute = async (proposal: Proposal) => {
+    const param = proposal.executeParam;
+    try {
+      // const executeResult = await execute({ args: [proposalId] });
+      const executeResult = await execute({ args: [param.targets, param.values, param.calldatas, createHashedDescription(param.description)] });
+      console.log("call execute success", executeResult);
+    } catch (e) {
+      console.error("call castVote failure", e);
+    }
+  }
+
   // 詳細表示中のProposal
   const [selectedProposalId, setSelectedProposalId] = useState<number | undefined>(undefined);
   const selectedProposal = proposalList.find((proposal) => proposal.id == selectedProposalId);
 
   // 詳細表示中のPrize
   const [selectedPrizeId, setSelectedPrizeId] = useState<number | undefined>(undefined);
-  const selectedPrize = dummyPrizeList.find((prize) => prize.prizeId == selectedPrizeId);
+  const selectedPrize = prizeList.find((prize) => prize.prizeId == selectedPrizeId);
 
   return (
     <>
@@ -270,7 +231,7 @@ const TopPage: NextPage = () => {
             <NewsAreaTitle>
               Pick Up News!
             </NewsAreaTitle>
-            <NewsList newsList={dummyNewsList} />
+            <NewsList newsList={newsList} />
           </NewsArea>
           <ProposalAndPrizeArea>
             <ProposalArea>
@@ -286,7 +247,7 @@ const TopPage: NextPage = () => {
               <PrizeAreaTitle>
                 PrizeArea
               </PrizeAreaTitle>
-              <PrizeList prizeList={dummyPrizeList} changeOpenPrizeModal={setSelectedPrizeId} />
+              <PrizeList prizeList={prizeList} changeOpenPrizeModal={setSelectedPrizeId} />
             </PrizeArea>
           </ProposalAndPrizeArea>
         </Components>
@@ -296,6 +257,7 @@ const TopPage: NextPage = () => {
         setSelectedProposalId={setSelectedProposalId}
         castVote={callCastVote}
         getHasVoted={getHasVoted}
+        execute={callExecute}
       />
       <PrizeDetailModal selectedPrize={selectedPrize} setSelectedPrizeId={setSelectedPrizeId} />
     </>

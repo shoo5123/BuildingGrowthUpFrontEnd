@@ -904,6 +904,21 @@
                         "internalType": "enum IGovernor.ProposalState",
                         "name": "status",
                         "type": "uint8"
+                    },
+                    {
+                        "internalType": "address[]",
+                        "name": "targets",
+                        "type": "address[]"
+                    },
+                    {
+                        "internalType": "uint256[]",
+                        "name": "values",
+                        "type": "uint256[]"
+                    },
+                    {
+                        "internalType": "bytes[]",
+                        "name": "calldatas",
+                        "type": "bytes[]"
                     }
                 ],
                 "internalType": "struct GrowthUP.ProposalResponce[]",
@@ -954,6 +969,21 @@
                         "internalType": "enum IGovernor.ProposalState",
                         "name": "status",
                         "type": "uint8"
+                    },
+                    {
+                        "internalType": "address[]",
+                        "name": "targets",
+                        "type": "address[]"
+                    },
+                    {
+                        "internalType": "uint256[]",
+                        "name": "values",
+                        "type": "uint256[]"
+                    },
+                    {
+                        "internalType": "bytes[]",
+                        "name": "calldatas",
+                        "type": "bytes[]"
                     }
                 ],
                 "internalType": "struct GrowthUP.ProposalResponce[]",

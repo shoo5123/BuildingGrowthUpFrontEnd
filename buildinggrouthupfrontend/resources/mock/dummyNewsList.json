@@ -1,0 +1,50 @@
+[
+    {
+      "newsId": 1,
+      "newsType": "new",
+      "description": "クリスマスイベントが開催されるかも・・",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 2,
+      "newsType": "done",
+      "description": "ハロウィンイベントが大盛況でした！",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 3,
+      "newsType": "new",
+      "description": "エレベーターの混雑が緩和されるかも！^^",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 4,
+      "newsType": "done",
+      "description": "A社とB社の共同展覧会が開催されました！",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 5,
+      "newsType": "new",
+      "description": "お正月のおせちをみんなで作りませんか？",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 6,
+      "newsType": "done",
+      "description": "上期の大感謝セールの口コミが大好評でした！",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 7,
+      "newsType": "new",
+      "description": "日曜日のカフェ難民を皆さんで救いましょう！",
+      "listingDate": "2023-11-20 01:00"
+    },
+    {
+      "newsId": 8,
+      "newsType": "done",
+      "description": "ショーケースイベントにD社とE社で参加しました！",
+      "listingDate": "2023-11-20 01:00"
+    }
+  ]

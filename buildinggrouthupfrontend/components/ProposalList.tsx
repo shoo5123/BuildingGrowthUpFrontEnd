@@ -67,15 +67,23 @@ interface Props {
   changeOpenProposalModal: (selectedProposalId: number | undefined) => void;
 }
 
+export interface ExecuteParam {
+  targets: Array<string>;
+  values: Array<number>;
+  calldatas: Array<string>;
+  description: string;
+}
+
 export interface Proposal {
   id: number;
   proposalId: string;
   title: string;
   description: string;
   proposer: string;
-  start: number;
-  end: number;
+  start: string;
+  end: string;
   status: number;
+  executeParam: ExecuteParam;
 }
 
 /**
@@ -86,7 +94,9 @@ export interface Proposal {
  * @returns 期限までの日数の文字列
  */
 const getProposalStatusLimit = (status: ProposalState, finishDateStr: string) => {
-  const today = moment();
+  const dummyToday = "2023-11-19";
+  // const today = moment();
+  const today = moment(dummyToday);
   const finishDate = moment(finishDateStr)
   const limitDay = finishDate.clone().diff(today, "days")
   if (status == ProposalState.Executed) {
@@ -138,7 +148,7 @@ const getProposalStatusIcon = (status: ProposalState) => {
 };
 
 export const ProposalList: React.FC<Props> = ({ proposalList, changeOpenProposalModal }) => {
-  const dummyEndDate = "2023-11-11"; // TODO: タイムスタンプで返ってくるようになったらdummyをやめる
+  // const dummyEndDate = "2023-11-11"; // TODO: タイムスタンプで返ってくるようになったらdummyをやめる
   const [selectedStatus, setSelectedStatus] = useState<ProposalState | undefined>(undefined);
   const onClickFilterStatusButton = (status: ProposalState) => {
     if (status == selectedStatus) {
@@ -166,7 +176,7 @@ export const ProposalList: React.FC<Props> = ({ proposalList, changeOpenProposal
               </ProposalTitle>
               <ProposalLimitAndIconArea>
                 {/* {getProposalStatusLimit(proposal.status, proposal.end)} */}
-                {getProposalStatusLimit(proposal.status, dummyEndDate)}
+                {getProposalStatusLimit(proposal.status, proposal.end)}
                 {getProposalStatusIcon(proposal.status)}
               </ProposalLimitAndIconArea>
             </ProposalLine>

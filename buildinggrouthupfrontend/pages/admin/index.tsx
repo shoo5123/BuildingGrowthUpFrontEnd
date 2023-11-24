@@ -108,9 +108,9 @@ const AdminPage: NextPage = () => {
   const router = useRouter();
   const contractJsonData = JSON.stringify(contractData);
   const contractObject = JSON.parse(contractJsonData);
-  const { contract } = useContract("0x63F4a29Bb25920E563144bbbcE4B15f8D1120C90", contractObject);
+  const { contract } = useContract("0xEe9510E3579Ba31ca96b213dCe077f5c66b17c19", contractObject);
   const { mutateAsync: proposeWithOffers, isLoading } = useContractWrite(contract, "proposeWithOffers");
-  const targets = ["0x2B38BA2E0C8251D02b61C4DFBEe161dbb6AE3e66"];
+  const targets = ["0x9566caB5BF05b711edf2C6b5cEC474Acd66cC765"];
   const values = [5];
 
   const createCalldata = (toAddress: string): string => {

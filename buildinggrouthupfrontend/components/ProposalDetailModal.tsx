@@ -73,13 +73,15 @@ interface Props {
   setSelectedProposalId: (selectedProposalId: number | undefined) => void;
   castVote: (proposalId: string, support: number) => void;
   getHasVoted: (proposalId: string) => boolean;
+  execute: (proposal: Proposal) => void;
 };
 
 const getButtonsArea = (
   proposalStatus: ProposalState,
   setSelectedProposalId: (id: number | undefined) => void,
   castVote: (voteType: VoteType) => void,
-  hasVoted: boolean
+  hasVoted: boolean,
+  execute: () => void
 ) => {
   if (proposalStatus == ProposalState.Active) {
     return (
@@ -105,6 +107,20 @@ const getButtonsArea = (
         <ButtonComponent onClick={() => setSelectedProposalId(undefined)}>閉じる</ButtonComponent>
       </ButtonsArea>
     );
+  } else if (proposalStatus == ProposalState.Succeeded) {
+    return (
+      <ButtonsArea>
+        <ButtonComponent
+          onClick={() => {
+            execute();
+            setSelectedProposalId(undefined);
+          }}
+        >
+          プロジェクト完了
+        </ButtonComponent>
+        <ButtonComponent onClick={() => setSelectedProposalId(undefined)}>閉じる</ButtonComponent>
+      </ButtonsArea>
+    );
   } else {
     return (
       <ButtonsArea>
@@ -114,7 +130,7 @@ const getButtonsArea = (
   }
 }
 
-const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedProposalId, castVote, getHasVoted }) => {
+const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedProposalId, castVote, getHasVoted, execute }) => {
   if (selectedProposal != undefined) {
     const hasVoted = getHasVoted(selectedProposal.proposalId);
     return (
@@ -131,7 +147,8 @@ const ProposalDetailModal: React.FC<Props> = ({ selectedProposal, setSelectedPro
               selectedProposal.status,
               setSelectedProposalId,
               (voteType: VoteType) => castVote(selectedProposal.proposalId, voteType),
-              hasVoted
+              hasVoted,
+              () => execute(selectedProposal)
             )}
           </ButtonArea>
         </ModalComponent>
