@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import contractData from "../../contract/custom_abi.json";
 import { Web3 } from "web3";
+import { BigNumber} from 'ethers';
 
 const FORM_COMPONENT_WIDTH = 480;
 
@@ -111,11 +112,13 @@ const AdminPage: NextPage = () => {
   const { contract } = useContract("0xEe9510E3579Ba31ca96b213dCe077f5c66b17c19", contractObject);
   const { mutateAsync: proposeWithOffers, isLoading } = useContractWrite(contract, "proposeWithOffers");
   const targets = ["0x9566caB5BF05b711edf2C6b5cEC474Acd66cC765"];
-  const values = [5];
+  const values = [0];
 
   const createCalldata = (toAddress: string): string => {
     const calldataMethodName = "transfer";
-    const transferValue = "50";
+    const transferValue = 50;
+    const decimals = 18;
+    const amount = BigNumber.from(transferValue).mul(BigNumber.from(10).pow(decimals)).toString();
 
     const web3 = new Web3();
     return web3.eth.abi.encodeFunctionCall({
@@ -128,7 +131,7 @@ const AdminPage: NextPage = () => {
           type: 'uint256',
           name: 'amount'
       }]
-    }, [toAddress, transferValue]);
+    }, [toAddress, amount]);
   };
 
   // 提案作成実行
