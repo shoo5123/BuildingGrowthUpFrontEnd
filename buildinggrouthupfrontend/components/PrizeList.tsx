@@ -14,7 +14,8 @@ const PrizeLine = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background: #DEFBFB;
+  // background: #DEFBFB;
+  border: 1px solid;
   border-radius: 8px;
   &:hover {
     cursor: pointer;

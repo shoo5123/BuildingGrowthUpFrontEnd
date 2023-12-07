@@ -7,35 +7,35 @@
         "prizeFruit": 20
     },
     {
-        "prizeId": 1,
+        "prizeId": 2,
         "title": "A社のコンサルティング料金10%オフ",
         "imageUrl": "../images/prize2.png",
         "description": "A社からのコンサルティングを10%引きで3回まで利用できます。",
         "prizeFruit": 30
     },
     {
-        "prizeId": 1,
+        "prizeId": 3,
         "title": "クリスマスイベントの広告ブース無料権",
         "imageUrl": "../images/prize3.png",
         "description": "12/24開催のクリスマスイベント時に、1F巨大広告スペースに無料で広告を出稿できます。",
         "prizeFruit": 100
     },
     {
-        "prizeId": 1,
+        "prizeId": 4,
         "title": "3月中のイベントの優先出店権",
         "imageUrl": "../images/prize4.png",
         "description": "3月中に行われるイベント（ひな祭りイベント、新生活応援イベント）時の出店ブースに優先して出店できます。",
         "prizeFruit": 15
     },
     {
-        "prizeId": 1,
+        "prizeId": 5,
         "title": "ビル内のコワーキングスペース1ヶ月無料権",
         "imageUrl": "../images/prize1.png",
         "description": "8Fのコワーキングスペース（約10人分）を1ヶ月間無料で利用できます。",
         "prizeFruit": 20
     },
     {
-        "prizeId": 1,
+        "prizeId": 6,
         "title": "展望台イベントの出展参加権",
         "imageUrl": "../images/prize2.png",
         "description": "半年間中に展望台で行われるいずれかのイベント時に優先して出店できます。",
